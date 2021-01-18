@@ -3,12 +3,14 @@ Just something I quickly wrote to make the use of ADCs as simply and quickly as 
 There are no delays or anything used - only busy flags.
 
 ## Usage:
-1.  Use the `analogRead(pin)` function to qiockly get a analog value.
+1.  Use the `analogRead(pin)` function to quickly get the analog value.  
+    #### Slow
 
 2.  Initialize the ADC with `ADC_Init(ClockPrescaler, VoltageRefference)`.  
     Start the conversion with `ADC_ConversionStart(pin)`.  
     Check the state of the conversion with `ADC_ConversionFinished()`.  
     Get the final value with `ADC_Result()`.  
+    #### Fast
     
 I have also included many useful Macros:  
  
