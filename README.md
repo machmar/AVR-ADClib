@@ -1,5 +1,6 @@
 # AVR-ADClib
-Just something I quickly wrote to make the use of ADCs as simply and quickly as possible without compromising any features.
+Just something I quickly wrote to make the use of ADCs as simply and quickly as possible without compromising any features.  
+There are no delays or anything used - only busy flags.
 
 ## Usage:
 1.  Use the `analogRead(pin)` function to qiockly get a analog value.
