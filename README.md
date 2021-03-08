@@ -5,6 +5,7 @@ This library has been tested on the AtMega 328p and it works only with the AtMeg
 
 ## Usage:
 1.  **SLOW**  
+    Initialize the ADC with `ADC_Init(ClockPrescaler, VoltageRefference)`.  
     Use the `analogRead(pin)` function to quickly get the analog value.  
 
 2.  **FAST**  
