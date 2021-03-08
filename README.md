@@ -1,6 +1,7 @@
 # AVR-ADClib
 Just something I quickly wrote to make the use of ADCs as simply and quickly as possible without compromising any features.  
-There are no delays or anything used - only busy flags.
+There are no delays or anything used - only busy flags.  
+This library has been tested on the AtMega 328p and it works only with the AtMega series.
 
 ## Usage:
 1.  **SLOW**  
