@@ -4,8 +4,7 @@ There are no delays or anything used - only busy flags.
 This library has been tested on the AtMega 328p and it works only with the AtMega series.
 
 ## Usage:
-1.  **SLOW**  
-    Initialize the ADC with `ADC_Init(ClockPrescaler, VoltageRefference)`.  
+1.  **SLOW**   
     Use the `analogRead(pin)` function to quickly get the analog value.  
 
 2.  **FAST**  
