@@ -6,6 +6,7 @@ It now has support for AtTiny devices (tested on AtTiny85) - use flag `__ADC_TIN
 
 ## Usage:
 1.  **SLOW**   
+    Initialize the ADC with `ADC_Init(ClockPrescaler, VoltageRefference)`.  
     Use the `analogRead(pin)` function to quickly get the analog value.  
 
 2.  **FAST**  
