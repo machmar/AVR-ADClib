@@ -54,7 +54,6 @@ uint16_t analogRead(uint8_t pin) {
 	
 	PRR &= ~(1 << PRADC);					//disable power reduction
 	ADCSRA |= (1 << ADEN);					//enable the ADC
-	ADCSRA |= (0b111 << ADPS0);				//set the clock division to 125kHz
 	ADCSRA |= (1 << ADSC);					//start conversion
 	while (bit_is_set(ADCSRA, ADSC));		//wait for the conversion to finish
 	
@@ -132,12 +131,10 @@ uint16_t ADC_Result() {
 
 uint16_t analogRead(uint8_t pin) {
 	ADMUX = pin;							//select the pin in the analog multiplexer
-	ADMUX |= (0b01 << REFS0);				//select AVcc as the reference voltage
 	DIDR0 = (1 << pin);						//disable the selected pin
 	
 	PRR &= ~(1 << PRADC);					//disable power reduction
 	ADCSRA |= (1 << ADEN);					//enable the ADC
-	ADCSRA |= (0b111 << ADPS0);				//set the clock division to 125kHz
 	ADCSRA |= (1 << ADSC);					//start conversion
 	while (bit_is_set(ADCSRA, ADSC));		//wait for the conversion to finish
 	
