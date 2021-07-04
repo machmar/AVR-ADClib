@@ -1,8 +1,8 @@
 # AVR-ADClib
 Just something I quickly wrote to make the use of ADCs as simply and quickly as possible without compromising any features.  
 There are no delays or anything used - only busy flags.  
-This library has been tested on the ATmega 328p and it works only with the ATmega series.  
-It now has support for ATtiny devices (tested on ATtiny85) - use flag `__ADC_TINY` to use this library with an ATtiny device.  
+This library has been tested on the ATmega 328p and ATtiny 85.  
+To use this library on the ATtiny platform use flag `__ADC_TINY`.  
 
 ## Usage:
 1.  **SLOW**   
