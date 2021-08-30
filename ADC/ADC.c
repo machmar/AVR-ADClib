@@ -7,48 +7,63 @@
 
 #include "ADC.h"
 
+uint8_t DataDirectionPrev;
+
 #ifdef __ADC_TINY
 
 uint16_t analogRead(uint8_t pin) {
 	ADMUX = pin;							//select the pin in the analog multiplexer
 	ADMUX &= ~(1 << ADLAR);					//right adjust the result
 	DIDR0 &= 0b11;							//reset DIDR0
+	DataDirectionPrev = DDRB;				//save the DDRB state
 	switch(pin) {							//disable the selected pin / pins
 		case A0:
 			DIDR0 |= 0b00100000;
+			DDRB &= ~0b00100000;
 			break;
 		case A1:
 			DIDR0 |= 0b00000100;
+			DDRB &= ~0b00000100;
 			break;
 		case A2:
 			DIDR0 |= 0b00010000;
+			DDRB &= ~0b00010000;
 			break;
 		case A3:
 			DIDR0 |= 0b00001000;
+			DDRB &= ~0b00001000;
 			break;
 		case __ADC_SRC_DIF_2_2_1x:
 			DIDR0 |= 0b00010000;
+			DDRB &= ~0b00010000;
 			break;
 		case __ADC_SRC_DIF_2_2_20x:
 			DIDR0 |= 0b00010000;
+			DDRB &= ~0b00010000;
 			break;
 		case __ADC_SRC_DIF_2_3_1x:
 			DIDR0 |= 0b00011000;
+			DDRB &= ~0b00011000;
 			break;
 		case __ADC_SRC_DIF_2_3_20x:
 			DIDR0 |= 0b00011000;
+			DDRB &= ~0b00011000;
 			break;
 		case __ADC_SRC_DIF_0_0_1x:
 			DIDR0 |= 0b00100000;
+			DDRB &= ~0b00100000;
 			break;
 		case __ADC_SRC_DIF_0_0_20x:
 			DIDR0 |= 0b00100000;
+			DDRB &= ~0b00100000;
 			break;
 		case __ADC_SRC_DIF_0_1_1x:
 			DIDR0 |= 0b00100100;
+			DDRB &= ~0b00100100;
 			break;
 		case __ADC_SRC_DIF_0_1_20x:
 			DIDR0 |= 0b00100100;
+			DDRB &= ~0b00100100;
 			break;
 	}
 	
@@ -58,6 +73,7 @@ uint16_t analogRead(uint8_t pin) {
 	while (bit_is_set(ADCSRA, ADSC));		//wait for the conversion to finish
 	
 	DIDR0 &= 0b11;							//enable the selected pin
+	DDRB = DataDirectionPrev;				//restore DDRB state
 	uint16_t output = ADCL | (ADCH << 8);	//make the output variable from the two registers
 	return output;							//return the combined 10bit value
 }
@@ -73,42 +89,55 @@ void ADC_Init(uint8_t ClockPrescaler, uint8_t VoltageRefference) {
 
 void ADC_ConversionStart(uint8_t pin) {
 	DIDR0 &= 0b11;							//reset DIDR0
+	DataDirectionPrev = DDRB;			//save the DDRB state
 	switch(pin) {							//disable the selected pin / pins
 		case A0:
 		DIDR0 |= 0b00100000;
+		DDRB &= ~0b00100000;
 		break;
 		case A1:
 		DIDR0 |= 0b00000100;
+		DDRB &= ~0b00000100;
 		break;
 		case A2:
 		DIDR0 |= 0b00010000;
+		DDRB &= ~0b00010000;
 		break;
 		case A3:
 		DIDR0 |= 0b00001000;
+		DDRB &= ~0b00001000;
 		break;
 		case __ADC_SRC_DIF_2_2_1x:
 		DIDR0 |= 0b00010000;
+		DDRB &= ~0b00010000;
 		break;
 		case __ADC_SRC_DIF_2_2_20x:
 		DIDR0 |= 0b00010000;
+		DDRB &= ~0b00010000;
 		break;
 		case __ADC_SRC_DIF_2_3_1x:
 		DIDR0 |= 0b00011000;
+		DDRB &= ~0b00011000;
 		break;
 		case __ADC_SRC_DIF_2_3_20x:
 		DIDR0 |= 0b00011000;
+		DDRB &= ~0b00011000;
 		break;
 		case __ADC_SRC_DIF_0_0_1x:
 		DIDR0 |= 0b00100000;
+		DDRB &= ~0b00100000;
 		break;
 		case __ADC_SRC_DIF_0_0_20x:
 		DIDR0 |= 0b00100000;
+		DDRB &= ~0b00100000;
 		break;
 		case __ADC_SRC_DIF_0_1_1x:
 		DIDR0 |= 0b00100100;
+		DDRB &= ~0b00100100;
 		break;
 		case __ADC_SRC_DIF_0_1_20x:
 		DIDR0 |= 0b00100100;
+		DDRB &= ~0b00100100;
 		break;
 	}
 	ADMUX &= ~(0b00001111);					//clearing the ADMUX MUX part so it doesn't break refference settings
@@ -123,6 +152,7 @@ bool ADC_ConversionFinished() {
 uint16_t ADC_Result() {
 	while (bit_is_set(ADCSRA, ADSC));		//wait until the conversion is done
 	DIDR0 &= 0b11;							//enable the selected pin
+	DDRB = DataDirectionPrev;				//restore DDRB state
 	uint16_t output = ADCL | (ADCH << 8);	//make the output variable from the two registers
 	return output;							//return the combined 10bit value
 }
@@ -131,7 +161,9 @@ uint16_t ADC_Result() {
 
 uint16_t analogRead(uint8_t pin) {
 	ADMUX = pin;							//select the pin in the analog multiplexer
+	DataDirectionPrev = DDRC;				//save the DDRB state
 	DIDR0 = (1 << pin);						//disable the selected pin
+	DDRC &= ~(1 << pin);					//make the pin an input
 	
 	PRR &= ~(1 << PRADC);					//disable power reduction
 	ADCSRA |= (1 << ADEN);					//enable the ADC
@@ -139,6 +171,7 @@ uint16_t analogRead(uint8_t pin) {
 	while (bit_is_set(ADCSRA, ADSC));		//wait for the conversion to finish
 	
 	DIDR0 = (0 << pin);						//enable the selected pin
+	DDRC = DataDirectionPrev;				//restore DDRC state
 	uint16_t output = ADCL | (ADCH << 8);	//make the output variable from the two registers
 	return output;							//return the combined 10bit value
 }
@@ -151,7 +184,9 @@ void ADC_Init(uint8_t ClockPrescaler, uint8_t VoltageRefference) {
 }
 
 void ADC_ConversionStart(uint8_t pin) {
+	DataDirectionPrev = DDRC;				//save the DDRB state
 	DIDR0 = (1 << pin);						//disable the selected pin
+	DDRC &= ~(1 << pin);					//make the pin an input
 	ADMUX &= ~(0b00001111);					//clearing the ADMUX MUX part so it doesn't break refference settings
 	ADMUX |= pin;							//set the ADC mux to the selected pin
 	ADCSRA |= (1 << ADSC);					//start conversion
@@ -164,6 +199,7 @@ bool ADC_ConversionFinished() {
 uint16_t ADC_Result() {
 	while (bit_is_set(ADCSRA, ADSC));		//wait until the conversion is done
 	DIDR0 = 0;								//enable the selected pin
+	DDRC = DataDirectionPrev;				//restore DDRC state
 	uint16_t output = ADCL | (ADCH << 8);	//make the output variable from the two registers
 	return output;							//return the combined 10bit value
 }
